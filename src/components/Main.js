@@ -12,7 +12,7 @@ export default () => {
   const [searchParams] = useSearchParams();
   const [value, setValue] = useState(0);
 
-  function useForceUpdate() {
+  function forceUpdate() {
     setValue((value) => value + 1); // update the state to force render
   }
 
@@ -24,6 +24,48 @@ export default () => {
       }
     return str.join("&");
   }
+
+  window.onunload = function () {
+    sessionStorage.removeItem("selected_playlists");
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("tokens_already_requested") === "false") {
+      // console.log("request for tokens initiated");
+      const code = searchParams.get("code");
+
+      const postBody = {
+        client_id: CLIENT_ID,
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: "http://localhost:3000/main",
+        code_verifier: localStorage.getItem("code_verifier"),
+      };
+
+      // console.log(queryStringify(postBody));
+
+      axios
+        .post(TOKEN_ENDPOINT, queryStringify(postBody), {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded;",
+          },
+        })
+        .then((response) => {
+          // console.log(response.data)
+
+          console.log("request for tokens successful");
+          localStorage.setItem("access_token", response.data.access_token);
+          localStorage.setItem("refresh_token", response.data.refresh_token);
+          localStorage.setItem("tokens_already_requested", "true");
+          // console.log(localStorage.getItem("access_token"));
+          // console.log(localStorage.getItem("refresh_token"));
+          forceUpdate();
+        })
+        .catch((error) => {
+          console.log("error in request for tokens.", error);
+        });
+    }
+  });
 
   function requestUsingRefreshToken() {
     if (localStorage.getItem("refresh_token")) {
@@ -58,46 +100,8 @@ export default () => {
   }
 
   useEffect(() => {
-    if (localStorage.getItem("tokens_already_requested") === "false") {
-      // console.log("request for tokens initiated");
-      const code = searchParams.get("code");
-
-      const postBody = {
-        client_id: CLIENT_ID,
-        grant_type: "authorization_code",
-        code: code,
-        redirect_uri: "http://localhost:3000/main",
-        code_verifier: localStorage.getItem("code_verifier"),
-      };
-
-      // console.log(queryStringify(postBody));
-
-      axios
-        .post(TOKEN_ENDPOINT, queryStringify(postBody), {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;",
-          },
-        })
-        .then((response) => {
-          // console.log(response.data)
-
-          console.log("request for tokens successful");
-          localStorage.setItem("access_token", response.data.access_token);
-          localStorage.setItem("refresh_token", response.data.refresh_token);
-          localStorage.setItem("tokens_already_requested", "true");
-          // console.log(localStorage.getItem("access_token"));
-          // console.log(localStorage.getItem("refresh_token"));
-          useForceUpdate();
-        })
-        .catch((error) => {
-          console.log("error in request for tokens.", error);
-        });
-    }
-  });
-
-  useEffect(() => {
     const interval = setInterval(() => {
-      useForceUpdate();
+      forceUpdate();
       requestUsingRefreshToken();
     }, DELAY);
 
