@@ -1,0 +1,167 @@
+* Query parameters fro implicit grant flow
+
+const CLIENT_ID = "2576cea43cb54b30809d0dd85c936e6f";
+const RESPONSE_TYPE = "token";
+const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
+const REDIRECT_URL_AFTER_LOGIN = "http://localhost:3000/main";
+const SCOPES =
+  "user-read-currently-playing user-read-playback-state playlist-read-private";
+
+
+* Additional href for authorization code flow
+
+&code_challenge_method=${CODE_CHALLENGE_METHOD}&code_challenge=${CODE_CHALLENGE}
+
+
+* Authorization request for implicit code flow
+
+ useEffect(() => {
+  if (window.location.hash) {
+  console.log("calling function")
+  const {
+      access_token,
+      token_type,
+      expires_in
+  } = getReturnedParamsfromSpotifyAuth(window.location.hash);
+  // console.log({ access_token, token_type, expires_in });
+
+  localStorage.clear();
+
+  localStorage.setItem("accessToken", access_token);
+  localStorage.setItem("tokenType", token_type);
+  localStorage.setItem("expiresIn", expires_in);
+  }
+});
+
+
+* Attempts to request token using axios post
+
+function getAccessToken(code) {
+axios({
+  method: "post",
+  url: TOKEN_ENDPOINT,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+  params: {
+    grant_type: "authorization_code",
+    code: code,
+    redirect_uri: "http://localhost:3000/main",
+    client_id: CLIENT_ID,
+    code_verifier: code_verifier,
+  },
+});
+
+axios
+  .post(TOKEN_ENDPOINT, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    params: {
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: "http://localhost:3000/main",
+      client_id: CLIENT_ID,
+      code_verifier: code_verifier,
+    },
+  })
+  .then((response) => {
+    setData(response.data);
+    console.log("successful");
+  })
+  .catch((error) => {
+    console.log("error was found.", error);
+  });
+}
+
+
+* Function to derive params from query in Implicit code flow
+
+const getReturnedParamsfromSpotifyAuth = (hash) => {
+  const stringAfterHashtag = hash.substring(1);
+  const paramsInUrl = stringAfterHashtag.split("&");
+  const paramsSplitUp = paramsInUrl.reduce((accumulator, currentValue) => {
+    const [key, value] = currentValue.split("=");
+    accumulator[key] = value;
+    return accumulator;
+  }, {});
+
+  return paramsSplitUp;
+};
+
+* How to create a function that runs every ____ amount of time
+
+const MINUTE_MS = 5000;
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    console.log("Logs every minute");
+  }, MINUTE_MS);
+
+  return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+}, []);
+
+
+* How to conditionally map an array
+
+{
+  data?.items
+    ? data.items.map((item) => (
+        <div key={item.id}>
+          <div>{item.name}</div>
+        </div>
+      ))
+    : null;
+}
+
+* how to create a copy of a state variable
+
+useEffect(() => {
+ if (data?.items) {
+  const dataCopy = [...data.items];
+  console.log("create dataCopy called");
+  }
+});
+
+
+* In case I need to change back to handleGetPlaylists function
+
+  const handleGetPlaylists = async () => {
+    console.log("handleGetPlaylists called");
+    console.log(token);
+    axios
+      .get(PLAYLISTS_ENDPOINT, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        params: { limit: 5, offset: 0 },
+      })
+      .then((response) => {
+        setData(response.data);
+        console.log("handleGetPlaylists successful");
+      })
+      .catch((error) => {
+        console.log("error was found.", error);
+      });
+  };
+
+  Attempt at resetting tokens:
+
+  setAccesstokencopy(
+        localStorage.getItem("access_token")
+      );
+      setRefreshtokencopy(
+        JSON.parse(JSON.stringify(localStorage.getItem("refresh_token")))
+      );
+      console.log("accesstokencopy: ", setAccesstokencopy)
+      if (
+        accesstokencopy != "" &&
+        accesstokencopy != null &&
+        refreshtokencopy != "" &&
+        refreshtokencopy != null
+      ) {
+        localStorage.setItem("access_token", accesstokencopy);
+        localStorage.setItem("refresh_token", refreshtokencopy);
+        console.log("tokens have been reset")
+      }

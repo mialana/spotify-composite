@@ -1,0 +1,98 @@
+html {
+  background-color: #212121;
+  box-sizing: border-box;
+  font-size: 100%
+}
+
+.App {
+  text-align: center;
+}
+
+img.logo {
+  display: flex;
+  width: 40%;
+  margin: auto;
+  padding-top: 2rem;
+  cursor: pointer;
+}
+
+.login {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  width: 75%;
+  margin: auto;
+  margin-top: 1.75rem;
+  padding: 1rem 0rem 2.5rem;
+  border-radius: 1rem;
+  border: 0.2rem solid white;
+  background-color: #181818;
+  font-size: 1rem;
+  font-family: 'Source Code Pro', monospace;
+}
+
+.logintext {
+  color: white;
+  margin-top: 2rem;
+  font-size: 100%;
+  width: 80%
+}
+
+.loginbutton {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 2.5rem;
+  background-color: #1DB954;
+  font-size: 1rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0.4rem #494949;
+  border-width: 0;
+  font-family: 'Source Code Pro', monospace;
+  transition: 250ms ease-in-out;
+}
+
+.loginbutton:hover {
+  background-color: #1bce5a;
+}
+
+.loginbutton:active {
+  background-color: #1bce5a;
+  box-shadow: 0 0.2rem #494949;;
+  transform: translateY(0.2rem);
+}
+
+@media screen and (min-width: 501px) {
+  .left-contentlist {
+    font-family: 'Source Code Pro', monospace;
+    margin-left: 1.5rem;
+    margin-top: 1.5rem;
+    color: white;
+    float: left;
+    height: 10rem;
+    width: 30rem;
+    overflow-y: auto;
+    border: 0.1rem solid white;
+  }
+
+  .listitems {
+    padding: 0.5rem;
+    border: 0.01rem solid white;
+    margin: 0.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  img.logo {
+    width: 65%;
+  }
+
+  .login {
+    width: 80%;
+    font-size: 1.1rem;
+  }
+}
