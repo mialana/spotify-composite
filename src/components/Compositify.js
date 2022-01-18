@@ -10,18 +10,10 @@ export default (props) => {
   const [token, setToken] = useState("");
   const [playlistID, setPlaylistID] = useState("");
   const [value, setValue] = useState(0);
+  const [modifiedArray, setModifiedArray] = useState();
 
   function forceUpdate() {
     setValue((value) => value + 1); // update the state to force render
-  }
-
-  function queryStringify(obj) {
-    var str = [];
-    for (var p in obj)
-      if (obj.hasOwnProperty(p)) {
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-      }
-    return str.join("&");
   }
 
   const modifyPrifacy = (input) => {
@@ -47,7 +39,17 @@ export default (props) => {
       console.log(description);
       console.log(collaboration);
       console.log(isPublic);
-      createNewPlaylist();
+      if (props.playlists.length > 100) {
+        alert("WARNING: You have exceeded 100 total playlist items. Your compiled playlist will not contain the excess items.")
+        let truncatedArray = props.playlists.slice(0, 100);
+        setModifiedArray(truncatedArray);
+        createNewPlaylist();
+      }
+      else {
+        setModifiedArray(props.playlists);
+        createNewPlaylist();
+      }
+      
     } else if (playlistName === "") {
       alert("Playlist Name Required!");
     } else if (props.playlists.length) {
@@ -85,12 +87,12 @@ export default (props) => {
   useEffect(() => {
     if (playlistID !== "") {
       console.log("add to playlist called");
-      console.log("calling uris: ", props.playlists)
+      console.log("calling 100 uris: ", modifiedArray)
       const ADD_TO_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/playlists/${playlistID}/tracks`;
 
       const postBody = {
         position: 0,
-        uris: props.playlists,
+        uris: modifiedArray,
       };
 
       axios
