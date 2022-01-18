@@ -52,7 +52,7 @@ export default (props) => {
       
     } else if (playlistName === "") {
       alert("Playlist Name Required!");
-    } else if (props.playlists.length) {
+    } else if (!props.playlists.length) {
       alert("Must Select A Playlist");
     }
   };

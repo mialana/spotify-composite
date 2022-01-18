@@ -7,38 +7,47 @@ const USER_ENDPOINT = "https://api.spotify.com/v1/me";
 
 export default () => {
   const [token, setToken] = useState("");
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
-
+  const [playlistsEndpoint, setPlaylistsEndpoint] = useState(
+    "https://api.spotify.com/v1/me/playlists"
+  );
   //   hooks like useState don't work in classes
+  const [value, setValue] = useState(0);
+
+  function forceUpdate() {
+    setValue((value) => value + 1); // update the state to force render
+  }
 
   const handleGetPlaylists = () => {
     // console.log("handleGetPlaylists called");
     // console.log(token);
     axios
-      .get(PLAYLISTS_ENDPOINT, {
+      .get(playlistsEndpoint, {
         headers: {
           Authorization: "Bearer " + token,
         },
-        params: { limit: 15, offset: 0 },
+        params: { limit: 5, offset: 0 },
       })
       .then((response) => {
-        setData(response.data);
+        
+        console.log(value)
+        if (value === 0) {
+          setData(response.data);
+          setValue(value + 1)
+        } else if (value !== 0) {
+          setData(data)
+        }
+
         console.log("handleGetPlaylists successful");
+        
+        
+        // console.log(data);
       })
       .catch((error) => {
         console.log("error was found.", error);
       });
   };
-
-  // needs token as parameter or else this useEffect is called once only
-
-  // useEffect(() => {
-  //   if (selectedPlaylists.length > 1) {
-  //     console.log("playlists: ", selectedPlaylists);
-  //     sessionStorage.setItem("selected_playlists", JSON.stringify(selectedPlaylists));
-  //   }
-  // }, [selectedPlaylists]);
 
   function playlistClicked(playlist, index) {
     console.log("Clicked", playlist);
@@ -55,41 +64,59 @@ export default () => {
       .then((response) => {
         console.log("get playlist successful");
         console.log(response.data.tracks.items);
-        const trackURIs = response.data.tracks.items.map((item) => {
-          if (item.track.type !== "track") {
-            alert(
-              "WARNING: Your playlist contains an item of irregular type. It will not be included in your compiled playlist."
-            );
-            return null;
-          }
-          return item.track.uri;
-        })
-        .filter((item) => {return item !== null});
-
-        console.log("trackIDs: ", trackURIs);
+        const trackURIs = response.data.tracks.items
+          .map((item) => {
+            if (item.track.type !== "track") {
+              alert(
+                "WARNING: Your playlist contains an item of irregular type. It will not be included in your compiled playlist."
+              );
+              return null;
+            }
+            return item.track.uri;
+          })
+          .filter((item) => {
+            return item !== null;
+          });
+        // console.log("trackIDs: ", trackURIs);
         setSelectedPlaylists((selectedPlaylists) => [
           ...selectedPlaylists,
           ...trackURIs,
         ]);
-        
       })
       .catch((error) => {
         console.log("get playlist failed: ", error);
       });
+
+    let selectedData = data.items.map((item) => {
+      if (item.id === playlist.id || item.content === "true") {
+        return {
+          ...item,
+          content: "true",
+        };
+      }
+      else {
+        return item;
+      }
+    });
+    console.log("selected data: ", selectedData)
+    setData(selectedData);
+    handleGetPlaylists();
   }
 
   function printData() {
     if (data !== undefined) {
-      // console.log("print data called");
+      console.log("print data called");
+      // console.log(data);
       // console.log(data.items);
       {
         return data?.items
           ? data.items.map((item, i) => (
               <div key={item.id} className="listitems">
                 <div
+                  className={item.content}
                   onClick={() => playlistClicked(item, i)}
                 >
-                  {item.name}
+                  {i} {item.name}
                 </div>
               </div>
             ))
@@ -98,6 +125,39 @@ export default () => {
       }
     }
   }
+
+  function handleNext() {
+    // console.log(data)
+    if (data.next === null) {
+      alert("Oh no! You don't have any more playlists!");
+    }
+    if (data.next) {
+      setPlaylistsEndpoint(data.next);
+    }
+  }
+
+  function handlePrevious() {
+    // console.log(data)
+    if (data.previous === null) {
+      alert("Oh no! You don't have any previous playlists!");
+    }
+    if (data.previous) {
+      setPlaylistsEndpoint(data.previous);
+    }
+  }
+
+  function handleUnselectAll() {
+    let clearedArr = [];
+    setSelectedPlaylists(clearedArr);
+    setValue(0);
+    handleGetPlaylists();
+    console.log("selected playlists: ", selectedPlaylists);
+  }
+
+  useEffect(() => {
+    if (playlistsEndpoint !== "https://api.spotify.com/v1/me/playlists")
+      handleGetPlaylists();
+  }, [playlistsEndpoint]);
 
   useEffect(() => {
     if (
@@ -140,9 +200,9 @@ export default () => {
     <div>
       <div className="left-contentlist">{printData()}</div>
       <p>
-        <button>Refresh</button>
-        <button>Next</button>
-        <button>Previous</button>
+        <button onClick={handleUnselectAll}>Unselect All</button>
+        <button onClick={handleNext}>Next</button>
+        <button onClick={handlePrevious}>Previous</button>
       </p>
       <Compositify playlists={selectedPlaylists} />
     </div>
