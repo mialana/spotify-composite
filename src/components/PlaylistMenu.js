@@ -7,41 +7,60 @@ const USER_ENDPOINT = "https://api.spotify.com/v1/me";
 
 export default () => {
   const [token, setToken] = useState("");
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   const [selectedPlaylists, setSelectedPlaylists] = useState([]);
   const [playlistsEndpoint, setPlaylistsEndpoint] = useState(
     "https://api.spotify.com/v1/me/playlists"
   );
-  //   hooks like useState don't work in classes
-  const [value, setValue] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [isSelected, setIsSelected] = useState([]);
 
-  function forceUpdate() {
-    setValue((value) => value + 1); // update the state to force render
-  }
+  //   hooks like useState don't work in classes
 
   const handleGetPlaylists = () => {
     // console.log("handleGetPlaylists called");
     // console.log(token);
+    const limit = 5;
     axios
       .get(playlistsEndpoint, {
         headers: {
           Authorization: "Bearer " + token,
         },
-        params: { limit: 5, offset: 0 },
+        params: { limit: limit, offset: 0 },
       })
       .then((response) => {
-        
-        console.log(value)
-        if (value === 0) {
+        // console.log("data: ", data);
+        if (total === 0) {
           setData(response.data);
-          setValue(value + 1)
-        } else if (value !== 0) {
-          setData(data)
+          // setRepeats((response.data.total / limit) + 1);
+          // setRepeats(repeats - 1);
+        } else if (data.items.length > 0) {
+          console.log("this is being called");
+
+          let allDataItems = data.items;
+          allDataItems = [...allDataItems, ...response.data.items];
+          let allData = data;
+          console.log(allData);
+
+          let filteredDataItems = allDataItems.filter(
+            (ele, ind) =>
+              allData.items.findIndex(
+                (elem) => ele.id === elem.id && elem.id === ele.id
+              ) === -1
+          );
+          console.log("this is filtered items: ", filteredDataItems);
+
+          let lastChance = data.items;
+          lastChance = [...lastChance, ...filteredDataItems];
+          allData = { ...response.data, items: lastChance };
+
+          setData(allData);
+          // setRepeats(repeats - 1);
         }
 
+        setTotal(response.data.total);
         console.log("handleGetPlaylists successful");
-        
-        
+
         // console.log(data);
       })
       .catch((error) => {
@@ -49,7 +68,7 @@ export default () => {
       });
   };
 
-  function playlistClicked(playlist, index) {
+  function playlistClicked(playlist) {
     console.log("Clicked", playlist);
     const token_for_user = localStorage.getItem("access_token");
     const GET_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/playlists/${playlist.id}`;
@@ -82,26 +101,29 @@ export default () => {
           ...selectedPlaylists,
           ...trackURIs,
         ]);
+        let index = data.items.findIndex((item) => item.id === playlist.id);
+        console.log(index);
+        let selectionArray = isSelected;
+        selectionArray[index] = "true";
+        console.log(selectionArray);
+        setIsSelected(selectionArray);
       })
       .catch((error) => {
         console.log("get playlist failed: ", error);
       });
-
-    let selectedData = data.items.map((item) => {
-      if (item.id === playlist.id || item.content === "true") {
-        return {
-          ...item,
-          content: "true",
-        };
-      }
-      else {
-        return item;
-      }
-    });
-    console.log("selected data: ", selectedData)
-    setData(selectedData);
-    handleGetPlaylists();
   }
+
+  // function findIndex(id) {
+  //   for (var i = 0; i < data.length; i++) {
+  //     console.log("looking", i)
+  //     if (data[i].id === id) {
+  //       console.log("found: ", i)
+  //       return i;
+  //     }
+  //   }
+  //   console.log("unsuccessful")
+  //   return -1; //to handle the case where the value doesn't exist
+  // }
 
   function printData() {
     if (data !== undefined) {
@@ -113,7 +135,13 @@ export default () => {
           ? data.items.map((item, i) => (
               <div key={item.id} className="listitems">
                 <div
-                  className={item.content}
+                  className={
+                    isSelected[
+                      data.items.findIndex(
+                        (playlist) => playlist.id === item.id
+                      )
+                    ]
+                  }
                   onClick={() => playlistClicked(item, i)}
                 >
                   {i} {item.name}
@@ -125,6 +153,14 @@ export default () => {
       }
     }
   }
+
+  useEffect(() => {
+    if (data.next) {
+      if (data.next !== null) {
+        setPlaylistsEndpoint(data.next);
+      }
+    }
+  });
 
   function handleNext() {
     // console.log(data)
@@ -149,14 +185,16 @@ export default () => {
   function handleUnselectAll() {
     let clearedArr = [];
     setSelectedPlaylists(clearedArr);
-    setValue(0);
     handleGetPlaylists();
     console.log("selected playlists: ", selectedPlaylists);
   }
 
   useEffect(() => {
-    if (playlistsEndpoint !== "https://api.spotify.com/v1/me/playlists")
-      handleGetPlaylists();
+    if (data.next) {
+      if (data.next !== null) {
+        handleGetPlaylists();
+      }
+    }
   }, [playlistsEndpoint]);
 
   useEffect(() => {
@@ -195,6 +233,15 @@ export default () => {
       handleGetPlaylists();
     }
   }, [token]);
+
+  useEffect(() => {
+    if (total !== 0) {
+      let initIsSelected = Array(total).fill("false");
+      console.log(initIsSelected);
+      setIsSelected(initIsSelected);
+      console.log(data.items);
+    }
+  }, [total]);
 
   return (
     <div>
