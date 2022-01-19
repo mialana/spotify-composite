@@ -3,61 +3,100 @@ import axios from "axios";
 
 export default (props) => {
   const [playlistName, setPlaylistName] = useState("");
-  const [privacy, setPrivacy] = useState("Public");
-  const [isPublic, setIsPublic] = useState(true);
   const [description, setDescription] = useState("");
   const [collaboration, setCollaboration] = useState(false);
+  const [privacy, setPrivacy] = useState("Public");
+  const [isPublic, setIsPublic] = useState(true);
+
   const [token, setToken] = useState("");
   const [playlistID, setPlaylistID] = useState("");
-  const [value, setValue] = useState(0);
+  const [playlistURL, setPlaylistURL] = useState("");
   const [modifiedArray, setModifiedArray] = useState();
+  const [visible, setVisible] = useState("notVisible");
+  const [repeats, setRepeats] = useState();
+  const [original, setOriginal] = useState();
 
-  function forceUpdate() {
-    setValue((value) => value + 1); // update the state to force render
-  }
-
-  const modifyPrifacy = (input) => {
-    setPrivacy(input.target.value);
-    if (input.target.value === "Public") {
-      setIsPublic(true);
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      setToken(localStorage.getItem("access_token"));
     }
-    if (input.target.value === "Private") {
-      setIsPublic(false);
-    }
-  };
+  });
 
-  const compositifyCalled = (event) => {
+  useEffect(() => {
+    if (typeof repeats != "undefined") {
+      const currentRepeats = repeats;
+      setRepeats(currentRepeats - 1);
+    }
+  }, [modifiedArray]);
+
+  useEffect(() => {
+    if (playlistID !== "" && typeof repeats != "undefined") {
+      // console.log("Add to playlist called");
+      // console.log("100 uris: ", modifiedArray);
+      const ADD_TO_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/playlists/${playlistID}/tracks`;
+
+      const postBody = {
+        position: 0,
+        uris: modifiedArray,
+      };
+
+      axios
+        .post(ADD_TO_PLAYLIST_ENDPOINT, JSON.stringify(postBody), {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        })
+        .then(() => {
+          const modArrayLastInd = modifiedArray.length - 1;
+          const fullArrayLastInd = props.playlists.length - 1;
+          if (
+            modifiedArray[modArrayLastInd] !== props.playlists[fullArrayLastInd] && repeats !== 0
+          ) {
+            const offset = original - repeats + 1;
+            const start = offset * 100;
+            if (repeats !== 1) {
+              const end = start + 100;
+              let truncatedArray = props.playlists.slice(start, end);
+              setModifiedArray(truncatedArray);
+            }
+          } else if (
+            modifiedArray[modArrayLastInd] === props.playlists[fullArrayLastInd]
+          ) {
+            const visibility = "isVisible";
+            setVisible(visibility);
+          }
+        })
+        .catch((error) => {
+          console.log("error in adding to playlist: ", error);
+        });
+    }
+  }, [playlistID, repeats]);
+
+  function compositifyCalled(event) {
     event.preventDefault();
-    forceUpdate();
     if (
       playlistName !== "" &&
       props.playlists.length &&
       localStorage.getItem("user_id")
     ) {
-      console.log(playlistName);
-      console.log(privacy);
-      console.log(description);
-      console.log(collaboration);
-      console.log(isPublic);
       if (props.playlists.length > 100) {
-        alert("WARNING: You have exceeded 100 total playlist items. Your compiled playlist will not contain the excess items.")
         let truncatedArray = props.playlists.slice(0, 100);
         setModifiedArray(truncatedArray);
         createNewPlaylist();
-      }
-      else {
+      } else {
         setModifiedArray(props.playlists);
         createNewPlaylist();
       }
-      
     } else if (playlistName === "") {
       alert("Playlist Name Required!");
     } else if (!props.playlists.length) {
       alert("Must Select A Playlist");
     }
-  };
+  }
 
   function createNewPlaylist() {
+    console.log(props.playlists);
     const userID = localStorage.getItem("user_id");
     const NEW_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/users/${userID}/playlists`;
 
@@ -75,77 +114,91 @@ export default (props) => {
         },
       })
       .then((response) => {
-        console.log("create new playlist successful");
+        // console.log("Create new playlist successful");
+        setPlaylistURL(response.data.external_urls.spotify);
         setPlaylistID(response.data.id);
-        console.log(response.data.id);
+
+        if (modifiedArray !== props.playlists) {
+          const numOfRepeats = Math.floor(props.playlists.length / 100) + 1;
+          setOriginal(numOfRepeats);
+          setRepeats(numOfRepeats);
+        }
+        if (modifiedArray === props.playlists) {
+          setRepeats(0);
+        }
       })
       .catch((error) => {
-        console.log("error in creating new playlist: ", error);
+        console.log("Error in creating new playlist: ", error);
       });
   }
 
-  useEffect(() => {
-    if (playlistID !== "") {
-      console.log("add to playlist called");
-      console.log("calling 100 uris: ", modifiedArray)
-      const ADD_TO_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/playlists/${playlistID}/tracks`;
-
-      const postBody = {
-        position: 0,
-        uris: modifiedArray,
-      };
-
-      axios
-        .post(ADD_TO_PLAYLIST_ENDPOINT, JSON.stringify(postBody), {
-          headers: {
-            Authorization: "Bearer " + token,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          console.log("add to playlist successful");
-        })
-        .catch((error) => {
-          console.log("error in adding to playlist: ", error);
-        });
+  function modifyPrifacy(input) {
+    setPrivacy(input.target.value);
+    if (input.target.value === "Public") {
+      setIsPublic(true);
     }
-  }, [playlistID]);
-
-  useEffect(() => {
-    if (localStorage.getItem("access_token")) {
-      setToken(localStorage.getItem("access_token"));
+    if (input.target.value === "Private") {
+      setIsPublic(false);
     }
-  });
+  }
+
+  function resetAll() {
+    props.forReset();
+    setPlaylistName("");
+    setDescription("");
+    setCollaboration(false);
+    setPrivacy("Public");
+    setIsPublic(true);
+    setPlaylistID("");
+    setPlaylistURL("");
+    setModifiedArray();
+    setVisible("notVisible");
+    setRepeats();
+    setOriginal();
+  }
 
   return (
-    <form onSubmit={compositifyCalled}>
-      <input
-        name="PlaylistName"
-        value={playlistName}
-        onChange={(input) => setPlaylistName(input.target.value)}
-      />
-      <textarea
-        name="Description"
-        value={description}
-        onChange={(input) => setDescription(input.target.value)}
-      />
-      <input
-        name="Collaboration"
-        type="checkbox"
-        checked={collaboration}
-        onChange={(input) => setCollaboration(input.target.checked)}
-      />
-      <div>
-        <select
-          name="Privacy"
-          value={privacy}
-          onChange={(input) => modifyPrifacy(input)}
-        >
-          <option>Public</option>
-          <option>Private</option>
-        </select>
-      </div>
-      <button type="submit">Compositify!</button>
-    </form>
+    <div>
+      <form onSubmit={compositifyCalled}>
+        <input
+          name="PlaylistName"
+          value={playlistName}
+          onChange={(input) => setPlaylistName(input.target.value)}
+        />
+        <textarea
+          name="Description"
+          value={description}
+          onChange={(input) => setDescription(input.target.value)}
+        />
+        <input
+          name="Collaboration"
+          type="checkbox"
+          checked={collaboration}
+          onChange={(input) => setCollaboration(input.target.checked)}
+        />
+        <div>
+          <select
+            name="Privacy"
+            value={privacy}
+            onChange={(input) => modifyPrifacy(input)}
+          >
+            <option>Public</option>
+            <option>Private</option>
+          </select>
+        </div>
+        <button type="submit">Compositify!</button>
+      </form>
+      <a
+        className={visible}
+        href={playlistURL}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Bring Me To My Playlist!
+      </a>
+      <button className={visible} onClick={resetAll}>
+        Reset All
+      </button>
+    </div>
   );
 };
