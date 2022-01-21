@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Compositify from "./Compositify";
 
-const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 const USER_ENDPOINT = "https://api.spotify.com/v1/me";
 
 export default () => {

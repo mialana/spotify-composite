@@ -124,7 +124,6 @@ img.logo {
 .pictures {
   align-items: center;
   float: left;
-  height: 25%;
   justify-content: center;
   margin: auto;
   width: 25%;
@@ -151,10 +150,10 @@ img.logo {
 .unselectButton {
   align-items: center;
   float: right;
-  height: 10%;
   justify-content: center;
   margin: auto;
   width: 1.15rem;
+  height: 1.15rem;
 }
 
 .unselect {
