@@ -98,7 +98,7 @@ export default (props) => {
   }
 
   function createNewPlaylist() {
-    console.log(props.playlists);
+    // console.log(props.playlists);
     const userID = localStorage.getItem("user_id");
     const NEW_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/users/${userID}/playlists`;
 
