@@ -98,10 +98,11 @@ export default (props) => {
   function compositifyCalled(event) {
     event.preventDefault();
     if (collaboration == true && isPublic == true) {
-      alert("To create a collaborative playlist, you must set the playlist to private")
+      alert(
+        "To create a collaborative playlist, you must set the playlist to private"
+      );
       return;
-    }
-    if (
+    } else if (
       playlistName !== "" &&
       props.playlists.length &&
       localStorage.getItem("user_id")
@@ -177,8 +178,8 @@ export default (props) => {
     }
   }
 
-  // function that resets all necessary state values 
-  // and calls forReset() from parent function 
+  // function that resets all necessary state values
+  // and calls forReset() from parent function
   function resetAll() {
     props.forReset();
     setPlaylistName("");
