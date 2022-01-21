@@ -33,7 +33,7 @@ export default () => {
         })
         .then((response) => {
           // console.log(response.data)
-          console.log("request for tokens successful");
+          // console.log("request for tokens successful");
           localStorage.setItem("access_token", response.data.access_token);
           localStorage.setItem("refresh_token", response.data.refresh_token);
           localStorage.setItem("tokens_already_requested", "true");
