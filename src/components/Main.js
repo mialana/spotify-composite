@@ -12,23 +12,6 @@ export default () => {
   const [searchParams] = useSearchParams();
   const [value, setValue] = useState(0);
 
-  function forceUpdate() {
-    setValue((value) => value + 1); // update the state to force render
-  }
-
-  function queryStringify(obj) {
-    var str = [];
-    for (var p in obj)
-      if (obj.hasOwnProperty(p)) {
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-      }
-    return str.join("&");
-  }
-
-  window.onunload = function () {
-    sessionStorage.removeItem("selected_playlists");
-  };
-
   useEffect(() => {
     if (localStorage.getItem("tokens_already_requested") === "false") {
       // console.log("request for tokens initiated");
@@ -42,8 +25,6 @@ export default () => {
         code_verifier: localStorage.getItem("code_verifier"),
       };
 
-      // console.log(queryStringify(postBody));
-
       axios
         .post(TOKEN_ENDPOINT, queryStringify(postBody), {
           headers: {
@@ -52,13 +33,10 @@ export default () => {
         })
         .then((response) => {
           // console.log(response.data)
-
           console.log("request for tokens successful");
           localStorage.setItem("access_token", response.data.access_token);
           localStorage.setItem("refresh_token", response.data.refresh_token);
           localStorage.setItem("tokens_already_requested", "true");
-          // console.log(localStorage.getItem("access_token"));
-          // console.log(localStorage.getItem("refresh_token"));
           forceUpdate();
         })
         .catch((error) => {
@@ -67,17 +45,24 @@ export default () => {
     }
   });
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      forceUpdate();
+      requestUsingRefreshToken();
+    }, DELAY);
+
+    return () => clearInterval(interval);
+  }, []);
+
   function requestUsingRefreshToken() {
     if (localStorage.getItem("refresh_token")) {
-      // console.log("request using refresh token initiated");
+      // console.log("Request using refresh token initiated");
 
       const postBody = {
         grant_type: "refresh_token",
         client_id: CLIENT_ID,
         refresh_token: localStorage.getItem("refresh_token"),
       };
-
-      // console.log(queryStringify(postBody));
 
       axios
         .post(TOKEN_ENDPOINT, queryStringify(postBody), {
@@ -88,25 +73,29 @@ export default () => {
         .then((response) => {
           // console.log("request using refresh token successful");
           // console.log(response.data);
-          // console.log("refreshtoken: ", localStorage.getItem("refresh_token"));
 
           localStorage.setItem("access_token", response.data.access_token);
           localStorage.setItem("refresh_token", response.data.refresh_token);
         })
         .catch((error) => {
-          console.log("error in request using refresh token.", error);
+          console.log("Error in request using refresh token.", error);
         });
     }
   }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      forceUpdate();
-      requestUsingRefreshToken();
-    }, DELAY);
+  function forceUpdate() {
+    let updatedValue = value + 1;
+    setValue(updatedValue);
+  }
 
-    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, []);
+  function queryStringify(obj) {
+    let str = [];
+    for (var p in obj)
+      if (obj.hasOwnProperty(p)) {
+        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+      }
+    return str.join("&");
+  }
 
   return (
     <div>

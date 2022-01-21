@@ -15,9 +15,10 @@ export default () => {
   const generateRandomString = (myLength) => {
     const chars =
       "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890_.-~";
+
     const randomArray = Array.from(
       { length: myLength },
-      (v, k) => chars[Math.floor(Math.random() * chars.length)]
+      () => chars[Math.floor(Math.random() * chars.length)]
     );
 
     const randomString = randomArray.join("");
@@ -29,7 +30,7 @@ export default () => {
 
     const hexDigest = sha256(localStorage.getItem("code_verifier"));
     const base64Digest = Buffer.from(hexDigest, "hex").toString("base64");
-    const CODE_CHALLENGE = await base64url.fromBase64(base64Digest);
+    const CODE_CHALLENGE = base64url.fromBase64(base64Digest);
 
     return CODE_CHALLENGE;
   }
@@ -41,14 +42,6 @@ export default () => {
     const setCodeChallenge = await createCodeChallenge();
     window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES}&code_challenge_method=${CODE_CHALLENGE_METHOD}&code_challenge=${setCodeChallenge}`;
   };
-
-  // useEffect(() => {
-  //   console.log("onLoad has been called")
-  //   window.addEventListener('load', localStorage.clear());
-  //   return function cleanup() {
-  //     window.removeEventListener('load', localStorage.clear());
-  //   };
-  // }, []);
 
   return (
     <div className="login">
