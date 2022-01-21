@@ -16,12 +16,15 @@ export default (props) => {
   const [repeats, setRepeats] = useState();
   const [original, setOriginal] = useState();
 
+  // continuously makes sure that access token is updated
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       setToken(localStorage.getItem("access_token"));
     }
   });
 
+  // useEffect that is used later on to account for 100 track limit when
+  // adding to playlist
   useEffect(() => {
     if (typeof repeats != "undefined") {
       const currentRepeats = repeats;
@@ -29,6 +32,11 @@ export default (props) => {
     }
   }, [modifiedArray]);
 
+  // axios post request that adds tracks to playlists
+  // dependencies array of playlistID (so that only called after
+  // an actual playlist was created by compositifyCalled())
+  // and repeats (so that only called when more add to playlist
+  // requests need to be made)
   useEffect(() => {
     if (playlistID !== "" && typeof repeats != "undefined") {
       // console.log("Add to playlist called");
@@ -48,6 +56,8 @@ export default (props) => {
           },
         })
         .then(() => {
+          // compares the values of the fullArray and modified array (modification done below)
+          // if not equal, more calls have to be made to add the remaining tracks to the playlist
           const modArrayLastInd = modifiedArray.length - 1;
           const fullArrayLastInd = props.playlists.length - 1;
           if (
@@ -55,13 +65,20 @@ export default (props) => {
               props.playlists[fullArrayLastInd] &&
             repeats !== 0
           ) {
+            // both original and repeats state variables help us determine how many more calls need to be made
             const offset = original - repeats + 1;
+            // determines which tracks should be added during the certain api request
             const start = offset * 100;
             if (repeats !== 1) {
               const end = start + 100;
               let truncatedArray = props.playlists.slice(start, end);
+              // by setting modifiedArray, we trigger the useEffect hook from up above
+              // which in turn updates repeats and calls this useEffect again
               setModifiedArray(truncatedArray);
             }
+            // if the last two indices do match up, no more add to playlists calls
+            // instead, simply set visibile state variable so that two buttons
+            // show up
           } else if (
             modifiedArray[modArrayLastInd] === props.playlists[fullArrayLastInd]
           ) {
@@ -75,6 +92,9 @@ export default (props) => {
     }
   }, [playlistID, repeats]);
 
+  // called after COMPOSITIFY button is clicked
+  // handles all possible errors user made while operating the app
+  // very initial truncation of total playlists tracks is performed here
   function compositifyCalled(event) {
     event.preventDefault();
     if (collaboration == true && isPublic == true) {
@@ -101,6 +121,10 @@ export default (props) => {
     }
   }
 
+  // called by compositifyCalled()
+  // axios post request to create a new playlist
+  // sets the playlistID so that tracks can be added
+  // sets the playlistURL so user can be directed via button
   function createNewPlaylist() {
     // console.log(props.playlists);
     const userID = localStorage.getItem("user_id");
@@ -122,13 +146,16 @@ export default (props) => {
       .then((response) => {
         // console.log("Create new playlist successful");
         setPlaylistURL(response.data.external_urls.spotify);
+        // remember, changing playlistID will trigger the above useEffect()
         setPlaylistID(response.data.id);
 
+        // sets initial values for number of repeats variables
         if (modifiedArray !== props.playlists) {
           const numOfRepeats = Math.floor(props.playlists.length / 100) + 1;
           setOriginal(numOfRepeats);
           setRepeats(numOfRepeats);
         }
+        // if the amount of selected tracks is < 0, there are zero repeats
         if (modifiedArray === props.playlists) {
           setRepeats(0);
         }
@@ -138,6 +165,8 @@ export default (props) => {
       });
   }
 
+  // handles the state setting of the public/privacy select tag
+  // necessary because only true and false are accepted by spotify api
   function modifyPrifacy(input) {
     setPrivacy(input.target.value);
     if (input.target.value === "Public") {
@@ -148,6 +177,8 @@ export default (props) => {
     }
   }
 
+  // function that resets all necessary state values 
+  // and calls forReset() from parent function 
   function resetAll() {
     props.forReset();
     setPlaylistName("");
@@ -163,6 +194,8 @@ export default (props) => {
     setOriginal();
   }
 
+  // for the form, the values rely on state variables that are changed when onChange property is triggered
+  // Bring me to my playlist button and reset all button have classes that dictate when they are visible
   return (
     <div className="formOverall">
       <div className="customize">

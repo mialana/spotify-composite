@@ -60,7 +60,9 @@ Miscellaneous Features:
 - Site deployed on Netlify
 - General HTML/CSS
 - React hooks
-- Components
+- Async/await
+- Passing properties from parent to child component
+- Using callbacks in child component to effect parent
 - Animations
 
 ## Time Spent

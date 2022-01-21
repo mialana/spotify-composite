@@ -26,7 +26,7 @@ export default () => {
     return randomString;
   };
 
-  // function that creates the required code challenge for Authorization Request API call
+  // function that creates the required code challenge for User Authorization Request API call
   async function createCodeChallenge() {
     localStorage.setItem("code_verifier", generateRandomString(128));
 
@@ -37,6 +37,8 @@ export default () => {
     return CODE_CHALLENGE;
   }
 
+  // redirects user to spotify-owned login page
+  // sets up local storage for later functions
   const handleLogin = async () => {
     localStorage.clear();
     localStorage.setItem("tokens_already_requested", "false");

@@ -14,6 +14,9 @@ export default () => {
     "https://api.spotify.com/v1/me/playlists"
   );
 
+  // retrieves user's profile information and sets user ID in localStorage
+  // in preparation for later Get Playlist call
+  // only called once
   useEffect(() => {
     if (
       localStorage.getItem("access_token") &&
@@ -38,6 +41,9 @@ export default () => {
     }
   });
 
+  // fills the state array that keeps track of whether playlists have been selected
+  // all initial values should be "notSelected"
+  // only runs when state variable 'total' has been set in handleGetPlaylist() function
   useEffect(() => {
     if (total !== 0) {
       let initialIsSelected = Array(total).fill("notSelected");
@@ -46,6 +52,10 @@ export default () => {
     }
   }, [total]);
 
+  // if access token has been set in localStorage, sets it as state variable 'token'
+  // if the data returned from handleGetPlaylists() has a .next value,
+  // changes the value of the endpoint to the given url
+  // runs infinitely amount of times as neccessary
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       setToken(localStorage.getItem("access_token"));
@@ -57,6 +67,7 @@ export default () => {
     }
   });
 
+  // if playlist endpoint has changed value, calls handleGetPlaylists()
   useEffect(() => {
     if (data.next) {
       if (data.next !== null) {
@@ -65,12 +76,14 @@ export default () => {
     }
   }, [playlistsEndpoint]);
 
+  // if token has changed, calls handleGetPlaylists
   useEffect(() => {
     if (token !== "") {
       handleGetPlaylists();
     }
   }, [token]);
 
+  // if the isSelected state array changes in any way, calls printData to update output right away
   useEffect(() => {
     if (isSelected.length > 0) {
       // console.log("Print Data called from useEffect");
@@ -78,6 +91,7 @@ export default () => {
     }
   }, [isSelected]);
 
+  // uses axios.get to get the current user's playlists
   function handleGetPlaylists() {
     axios
       .get(playlistsEndpoint, {
@@ -87,8 +101,11 @@ export default () => {
         params: { limit: 5, offset: 0 },
       })
       .then((response) => {
+        // if this is the first call, then response.data is set in state
         if (total === 0) {
           setData(response.data);
+        // if in any following call, must filter out items that have already been
+        // received, and concatenates it onto the existing data variable
         } else if (data.items.length > 0) {
           let filteredDataItems = response.data.items.filter(
             (ele) =>
@@ -104,9 +121,9 @@ export default () => {
           totalData = { ...response.data, items: totalDataItems };
           setData(totalData);
         }
+        // this will activate the aforementioned useEffect() hook above
         setTotal(response.data.total);
         // console.log("handleGetPlaylists successful");
-
         // console.log(data);
       })
       .catch((error) => {
@@ -114,9 +131,11 @@ export default () => {
       });
   }
 
+  // handles when the user clicks a playlist
   function playlistClicked(playlist, selected, endpoint) {
     // console.log("Clicked: ", playlist);
 
+    // changes state of index in isSelected array
     let index = data.items.findIndex((item) => item.id === playlist.id);
     // console.log("Index of selection: ", index);
     let selectionArray = isSelected;
@@ -129,8 +148,10 @@ export default () => {
     // console.log("Current selection state array: ", selectionArray);
     setIsSelected(selectionArray);
 
+    // axios get request for Get Playlist
+    // necessary because data returned on Get Current User's Playlists request
+    // does not contain sufficient info on specific tracks
     const token_for_user = localStorage.getItem("access_token");
-    const GET_PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/playlists/${playlist.id}`;
     // console.log(token_for_user);
     axios
       .get(endpoint, {
@@ -142,7 +163,11 @@ export default () => {
         // console.log("Get playlist successful");
         // console.log("Returned Selected Tracks: ", response.data);
 
+        // sorts out objects that aren't of type "track"
+        // sets filtered data in a state variable
+        // each selected playlist's tracks will be concatenated onto that singular state array
         if (selected === true) {
+          // runs when this is not the first call for this playlist
           if (response.data.items) {
             const trackURIs = response.data.items
               .map((item) => {
@@ -163,9 +188,11 @@ export default () => {
               ...selectedTracks,
               ...trackURIs,
             ]);
+            // calls playlistClicked again if there is still more tracks left in playlist
             if (response.data.next !== null) {
               playlistClicked(playlist, selected, response.data.next);
             }
+          // runs on the first time this playlist is called for
           } else if (response.data.tracks.items) {
             const trackURIs = response.data.tracks.items
               .map((item) => {
@@ -191,6 +218,8 @@ export default () => {
             }
           }
         }
+        // allows for unselect button
+        // removes all of that playlist's uris from the overall array
         if (selected === false) {
           const updatedTracks = selectedTracks;
 
@@ -213,11 +242,14 @@ export default () => {
       });
   }
 
+  // this function prints the data that was received and is constantly updated
   function printData() {
     if (data !== undefined) {
       // console.log("Print Data called");
-      // console.log(data);
       {
+        // maps the data into divs 
+        // very specific classNames so that css works properly
+        // also includes the playlist img tag and the unselect button tag
         return data?.items
           ? data.items.map((item, i) => (
               <div
@@ -271,6 +303,8 @@ export default () => {
     }
   }
 
+  // when called, the isSelected array and selectedTracks arrays will both
+  // be reset to their previous values
   function handleUnselectAll() {
     let clearedArr = [];
     // console.log("Cleared playlists: ", clearedArr);
