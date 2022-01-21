@@ -26,20 +26,21 @@ as they'd like. Then, they should fill in the fields on the right-hand side to t
 The only required field is playlist name.
 
 Lastly, the user just needs to press the "COMPOSITIFY" button. The merged playlist will
-be created and placed in your account, and two buttons will pop up.
-One will open a new tab directing you to your playlist, the other will reset all fields.
+be created and placed in their account, and two buttons will pop up.
+One will open a new tab directing them to their playlist, the other will reset all fields.
 
-Enjoy your Compositify-ed Playlist!!!
+Enjoy your Compositify-ed Playlist !!!
 
 ## Implemented Features
 
-Authorization Code Flow and API Calls:
-My app utilizes the PKCE extension of the [Spotify Authorization Code Flow](https://developer.spotify.com/documentation/general/guides/authorization/code-flow/)
+Authorization Code Flow and API Calls: \
+
+My app utilizes the PKCE extension of the [Spotify Authorization Code Flow](https://developer.spotify.com/documentation/general/guides/authorization/code-flow/).
 
 I chose to use Axios GET/POST requests to make my API calls. 
 Listed below are the specific types of calls made to the Spotify API:
 
-- User Authorization Request(Same link as above)
+- User Authorization Request (Same link as above)
 - Access Token Request (Same link as above)
 - Refreshed Access Token Request (Same link as above)
 - [Get Current User's Profile Request](https://developer.spotify.com/documentation/web-api/reference/#/operations/get-current-users-profile)
@@ -67,8 +68,8 @@ Miscellaneous Features:
 
 ## Time Spent
 
-Friday, January 14th: 3 hrs
-Saturday, January 15th: 2.5 hrs
+Friday, January 14th: 3 hrs \
+Saturday, January 15th: 2.5 hrs \
 Sunday, January 16th - Thursday, January 20th: Brief 15-30 minute work sessions
 
 ## How to Run
@@ -97,4 +98,4 @@ Followed by:
 This will run the app in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
+The page will reload when you make changes.
