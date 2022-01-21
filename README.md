@@ -2,69 +2,99 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+NOTE - PLEASE READ: According to the Spotify API Developer rules, this app requires specific user account 
+authorization to use.
+Please email liu.amy05@gmail.com if you wish to obtain access to this app.
 
-In the project directory, you can run:
+- View the following link for more information on this requirement:
+  [Spotify For Developers](https://developer.spotify.com/community/news/2021/05/27/improving-the-developer-and-user-experience-for-third-party-apps/)
+  
+## Description
+
+For the Spark Red Technical Assessment, I made an app called Spotify Composite.
+It essentially merges multiple playlists from a user's Spotify account into 
+one large, customized playlist.
+
+Upon arriving on the initial log-in page, users will be asked to sign in to their
+Spotify account and confirm that the app can access certain data from their account.
+
+After confirming, they will be redirected to the app's home page, where they can see
+a scroll menu containing their playlists and a customization menu containing various fields.
+
+To use the app, the user should first select as little or as many of their playlists 
+as they'd like. Then, they should fill in the fields on the right-hand side to their liking.
+The only required field is playlist name.
+
+Lastly, the user just needs to press the "COMPOSITIFY" button. The merged playlist will
+be created and placed in your account, and two buttons will pop up.
+One will open a new tab directing you to your playlist, the other will reset all fields.
+
+Enjoy your Compositify-ed Playlist!!!
+
+## Implemented Features
+
+Authorization Code Flow and API Calls:
+My app utilizes the PKCE extension of the [Spotify Authorization Code Flow](https://developer.spotify.com/documentation/general/guides/authorization/code-flow/)
+
+I chose to use Axios GET/POST requests to make my API calls. 
+Listed below are the specific types of calls made to the Spotify API:
+
+- User Authorization Request(Same link as above)
+- Access Token Request (Same link as above)
+- Refreshed Access Token Request (Same link as above)
+- [Get Current User's Profile Request](https://developer.spotify.com/documentation/web-api/reference/#/operations/get-current-users-profile)
+- [Get Current User's Playlists Request](https://developer.spotify.com/documentation/web-api/reference/#/operations/get-a-list-of-current-users-playlists)
+- [Get Playlist Request](https://developer.spotify.com/documentation/web-api/reference/#/operations/get-playlist)
+- [Create Playlist Request](https://developer.spotify.com/documentation/web-api/reference/#/operations/create-playlist)
+- [Add Items to Playlist Request](https://developer.spotify.com/documentation/web-api/reference/#/operations/add-tracks-to-playlist)
+
+UI/UX Features:
+- Redirect to Login Page by clicking logo
+- Redirect to playlist url by clicking playlist image
+- Unselect button
+- Unselect All button
+- Scrollable Div Box
+- "COMPOSITIFY" Form Submission button
+- Bring Me To My Playlist button
+- Reset All button
+
+Miscellaneous Features:
+- Site deployed on Netlify
+- General HTML/CSS
+- React hooks
+- Components
+- Animations
+
+## Time Spent
+
+Friday, January 14th: 3 hrs
+Saturday, January 15th: 2.5 hrs
+Sunday, January 16th - Thursday, January 20th: Brief 15-30 minute work sessions
+
+## How to Run
+
+Method 1: [Live Deployment of Website on Netlify](https://boring-brahmagupta-56d3ae.netlify.app)
+
+Method 2: Run site locally using the following steps:
+
+First, download the .zip file for the master branch above.
+
+Then, make sure you have node and npm installed using:
+
+### `node -v`
+### `npm -v`
+
+If not installed, download the appropriate package on [this site](https://nodejs.org/en/download/)
+
+Now, navigate into the project directory and run:
+
+### `npm install`
+
+Followed by:
 
 ### `npm start`
 
-Runs the app in the development mode.\
+This will run the app in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

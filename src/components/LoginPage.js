@@ -12,6 +12,7 @@ const SCOPES =
 const CODE_CHALLENGE_METHOD = "S256";
 
 export default () => {
+  // function that generates random string from listed acceptable characters on Spotify API
   const generateRandomString = (myLength) => {
     const chars =
       "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890_.-~";
@@ -25,6 +26,7 @@ export default () => {
     return randomString;
   };
 
+  // function that creates the required code challenge for Authorization Request API call
   async function createCodeChallenge() {
     localStorage.setItem("code_verifier", generateRandomString(128));
 
