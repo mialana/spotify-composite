@@ -46,9 +46,9 @@ Listed below are the specific types of calls made to the Spotify API:
 - [Create Playlist Request](https://developer.spotify.com/documentation/web-api/reference/#/operations/create-playlist)
 - [Add Items to Playlist Request](https://developer.spotify.com/documentation/web-api/reference/#/operations/add-tracks-to-playlist)
 
-UI/UX Features:
--Customized logo created in Adobe Photoshop
-    -The design takes characteristics from offical Spotify logo / font
+UI/UX Features:\
+-Customized logo created in Adobe Photoshop\
+&emsp; -The design takes characteristics from offical Spotify logo / font
 - Redirect to Login Page by clicking logo
 - Redirect to playlist url by clicking playlist image
 - Unselect button
