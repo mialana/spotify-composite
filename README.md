@@ -1,9 +1,7 @@
 # spark-spotify-composite
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 NOTE - PLEASE READ: According to the Spotify API Developer rules, this app requires specific user account 
-authorization to use.
+authorization to use. \
 Please email liu.amy05@gmail.com if you wish to obtain access to this app.
 
 - View the following link for more information on this requirement:
@@ -33,8 +31,7 @@ Enjoy your Compositify-ed Playlist !!!
 
 ## Implemented Features
 
-Authorization Code Flow and API Calls: \
-
+Authorization Code Flow and API Calls:\
 My app utilizes the PKCE extension of the [Spotify Authorization Code Flow](https://developer.spotify.com/documentation/general/guides/authorization/code-flow/).
 
 I chose to use Axios GET/POST requests to make my API calls. 
