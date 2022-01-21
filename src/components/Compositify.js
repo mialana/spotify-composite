@@ -77,6 +77,10 @@ export default (props) => {
 
   function compositifyCalled(event) {
     event.preventDefault();
+    if (collaboration == true && isPublic == true) {
+      alert("To create a collaborative playlist, you must set the playlist to private")
+      return;
+    }
     if (
       playlistName !== "" &&
       props.playlists.length &&
@@ -194,11 +198,11 @@ export default (props) => {
           <div className="collaborationText">
             Collaboration?
             <input
+              className="collaboration"
               name="Collaboration"
               type="checkbox"
               checked={collaboration}
               onChange={(input) => setCollaboration(input.target.checked)}
-              className="collaboration"
             />
           </div>
         </div>

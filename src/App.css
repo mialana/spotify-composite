@@ -250,6 +250,11 @@ img.logo {
   border-radius: 0.5rem;
 }
 
+.playlistName::placeholder {
+  color: white;
+  opacity: 75%;
+}
+
 .description {
   font-family: "Source Code Pro", monospace;
   font-size: 0.75rem;
@@ -266,6 +271,11 @@ img.logo {
   height: 8rem;
   border: 0.01rem solid white;
   border-radius: 0.5rem;
+}
+
+.description::placeholder {
+  color: white;
+  opacity: 75%;
 }
 
 .privacyCollaboration {
