@@ -221,36 +221,50 @@ export default () => {
       {
         return data?.items
           ? data.items.map((item, i) => (
-              <div key={item.id} className="listItems">
-                <div
-                  className={
-                    isSelected[
-                      data.items.findIndex(
-                        (playlist) => playlist.id === item.id
-                      )
-                    ]
-                  }
-                  onClick={() =>
-                    playlistClicked(
-                      item,
-                      true,
-                      `https://api.spotify.com/v1/playlists/${item.id}`
-                    )
-                  }
-                >
-                  {i} {item.name}
+              <div
+                key={item.id}
+                className={
+                  isSelected[
+                    data.items.findIndex((playlist) => playlist.id === item.id)
+                  ]
+                }
+                onClick={() =>
+                  playlistClicked(
+                    item,
+                    true,
+                    `https://api.spotify.com/v1/playlists/${item.id}`
+                  )
+                }
+              >
+                <div className="pictures">
+                  <a href={item.external_urls.spotify}>
+                    <img
+                      src={item.images[0].url}
+                      alt="albumpicture"
+                      className="albumPic"
+                    ></img>
+                  </a>
                 </div>
-                <button
-                  onClick={() =>
-                    playlistClicked(
-                      item,
-                      false,
-                      `https://api.spotify.com/v1/playlists/${item.id}`
-                    )
-                  }
-                >
-                  X
-                </button>
+                <div className="tracks">
+                  <div>
+                    <strong>{item.name}</strong>
+                  </div>
+                </div>
+                <div className="unselectButton">
+                  <button
+                    className="unselect"
+                    onClick={(b) => {
+                      b.stopPropagation();
+                      playlistClicked(
+                        item,
+                        false,
+                        `https://api.spotify.com/v1/playlists/${item.id}`
+                      );
+                    }}
+                  >
+                    <strong>X</strong>
+                  </button>
+                </div>
               </div>
             ))
           : null;
@@ -268,11 +282,17 @@ export default () => {
   }
 
   return (
-    <div>
-      <div className="left-contentlist">{printData()}</div>
-      <p>
-        <button onClick={handleUnselectAll}>Unselect All</button>
-      </p>
+    <div className="overallPage">
+      <div className="left-contentlist">
+        <div className="choose"><strong>Choose from your Playlists Below!</strong></div>
+        <p>
+          <button className="unselectAll" onClick={handleUnselectAll}>
+            <strong>UNSELECT ALL</strong>
+          </button>
+        </p>
+        {printData()}
+      </div>
+
       <Compositify playlists={selectedTracks} forReset={handleUnselectAll} />
     </div>
   );

@@ -4,54 +4,61 @@ html {
   font-size: 100%;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-size: 100%;
+}
+
 .App {
   text-align: center;
 }
 
 img.logo {
+  cursor: pointer;
   display: flex;
-  width: 40%;
   margin: auto;
   padding-top: 2rem;
-  cursor: pointer;
+  width: 40%;
 }
 
 .login {
-  display: flex;
   align-items: center;
+  background-color: #181818;
+  border: 0.2rem solid white;
+  border-radius: 1rem;
+  display: flex;
   flex-direction: column;
-  text-align: center;
-  width: 75%;
+  font-family: "Source Code Pro", monospace;
+  font-size: 1rem;
   margin: auto;
   margin-top: 1.75rem;
   padding: 1rem 0rem 2.5rem;
-  border-radius: 1rem;
-  border: 0.2rem solid white;
-  background-color: #181818;
-  font-size: 1rem;
-  font-family: "Source Code Pro", monospace;
+  text-align: center;
+  width: 75%;
 }
 
 .logintext {
   color: white;
-  margin-top: 2rem;
   font-size: 100%;
+  margin-top: 2rem;
   width: 80%;
 }
 
 .loginbutton {
+  background-color: #1db954;
+  border-radius: 2.5rem;
+  border-width: 0;
+  box-shadow: 0 0.4rem #494949;
+  color: white;
+  cursor: pointer;
+  font-family: "Source Code Pro", monospace;
+  font-size: 1rem;
   margin-left: 1rem;
   margin-right: 1rem;
   margin-top: 1rem;
   padding: 1.25rem 1.5rem;
-  border-radius: 2.5rem;
-  background-color: #1db954;
-  font-size: 1rem;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 0.4rem #494949;
-  border-width: 0;
-  font-family: "Source Code Pro", monospace;
   transition: 250ms ease-in-out;
 }
 
@@ -65,52 +72,284 @@ img.logo {
   transform: translateY(0.2rem);
 }
 
-@media screen and (min-width: 501px) {
-  .left-contentlist {
-    font-family: "Source Code Pro", monospace;
-    margin-left: 1.5rem;
-    margin-top: 1.5rem;
-    color: white;
-    float: left;
-    height: 10rem;
-    width: 30rem;
-    overflow-y: auto;
-    border: 0.1rem solid white;
-  }
-
-  .listItems {
-    padding: 0.5rem;
-    border: 0.01rem solid white;
-    margin: 0.5rem;
-    margin-bottom: 1rem;
-  }
+.overallPage {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
-@media screen and (max-width: 500px) {
-  img.logo {
-    width: 65%;
-  }
+.choose {
+  justify-content: center;
+  margin: auto;
+  padding: 1rem 1rem 0rem 1rem;
+  text-align: center;
+}
 
-  .login {
-    width: 80%;
-    font-size: 1.1rem;
-  }
+.unselectAll {
+  align-items: center;
+  background-color: white;
+  border-radius: 0.5rem;
+  border-style: none;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  font-family: "Source Code Pro", monospace;
+  font-size: 0.75rem;
+  margin: auto;
+  padding: 0.25rem;
+  transition: 150ms ease-in-out;
+}
+
+.unselectAll:hover {
+  background-color: #757575;
+  color: white;
+}
+
+.left-contentlist {
+  background-color: #313131;
+  border: 0.3rem solid white;
+  border-radius: 0.5rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-family: "Source Code Pro", monospace;
+  height: 35rem;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  margin-top: 1.5rem;
+  overflow-y: auto;
+  width: 40%;
+}
+
+.pictures {
+  align-items: center;
+  float: left;
+  height: 25%;
+  justify-content: center;
+  margin: auto;
+  width: 25%;
+}
+
+.albumPic {
+  height: 100%;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+.tracks {
+  align-items: center;
+  display: flex;
+  font-size: 0.9rem;
+  height: 40%;
+  justify-content: center;
+  margin: auto;
+  padding: none;
+  text-align: center;
+  width: 50%;
+}
+
+.unselectButton {
+  align-items: center;
+  float: right;
+  height: 10%;
+  justify-content: center;
+  margin: auto;
+  width: 1.15rem;
+}
+
+.unselect {
+  border-style: none;
+  background-color: white;
+  border-radius: 0.25rem;
+  font-size: 0.5rem;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.unselect:hover {
+  border-style: none;
+  background-color: black;
+  color: white;
+  transition: 150ms ease-in;
 }
 
 .wasSelected {
-  background-color: black;
+  background-color: #757575;
+  border: 0.3rem solid black;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: row;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+.notSelected {
+  background-color: #212121;
+  border: 0.1rem solid white;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: row;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+.notSelected:hover {
+  background-color: #757575;
+  transition: 150ms ease-in;
+}
+
+.formOverall {
+  background-color: #313131;
+  margin: 1rem;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  margin: auto;
+  margin-left: 2rem;
+  margin-right: 1rem;
+  padding: 1.5rem;
+  border: 0.3rem solid white;
+  border-radius: 0.5rem;
+  color: white;
+  flex-direction: column;
+  font-family: "Source Code Pro", monospace;
+  float: right;
+}
+
+.form {
+  width: 100%;
+  height: 100%;
+}
+
+.customize {
+  justify-content: center;
+  margin: auto;
+  padding: 0rem 1rem 1rem 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+.playlistName {
+  font-family: "Source Code Pro", monospace;
+  font-size: 0.9rem;
+  margin: auto;
+  justify-content: center;
+  display: flex;
+  width: 85%;
+  background-color: #757575;
+  color: white;
+  text-align: center;
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+  margin-bottom: 1rem;
+  border: 0.01rem solid white;
+  border-radius: 0.5rem;
+}
+
+.description {
+  font-family: "Source Code Pro", monospace;
+  font-size: 0.75rem;
+  margin: auto;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+  background-color: #757575;
+  color: white;
+  padding: 0.25rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
+  height: 8rem;
+  border: 0.01rem solid white;
+  border-radius: 0.5rem;
+}
+
+.privacyCollaboration {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: auto;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.privacy {
+  display: flex;
+  margin: auto;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  background-color: #757575;
+  border: 0.01rem solid white;
+  border-radius: 0.5rem;
+  font-family: "Source Code Pro", monospace;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.collaborationText {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  margin-right: 1rem;
+  font-size: 0.75rem;
+  align-items: center;
+}
+
+.collaboration {
+  margin-left: 0.5rem;
+}
+
+.submit {
+  font-family: "Source Code Pro", monospace;
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  border-style: none;
+  background-color: #1db954;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  height: 100%;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.submit:hover {
+  background-color: #1bce5a;
+  transition: 150ms ease-in;
 }
 
 .notVisible {
   display: none;
 }
 
-a.isVisible {
-  box-sizing: border-box;
-  text-decoration: none;
-  background-color: white;
-  color: black;
-  padding: 2px 6px 2px 6px;
+.isVisible {
+  background-color: #212121;
+  border: 0.1rem solid white;
   border-radius: 0.5rem;
+  box-sizing: border-box;
+  color: white;
+  padding: 2px 6px 2px 6px;
+  text-decoration: none;
+  margin: auto;
+  margin-top: 1rem;
+  font-family: "Source Code Pro", monospace;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.4rem;
+  width: 75%;
+  transition: 150ms ease-in;
+}
+
+.isVisible:hover {
+  background-color: grey;
   border: 0.1rem solid white;
 }

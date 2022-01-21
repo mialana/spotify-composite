@@ -51,7 +51,9 @@ export default (props) => {
           const modArrayLastInd = modifiedArray.length - 1;
           const fullArrayLastInd = props.playlists.length - 1;
           if (
-            modifiedArray[modArrayLastInd] !== props.playlists[fullArrayLastInd] && repeats !== 0
+            modifiedArray[modArrayLastInd] !==
+              props.playlists[fullArrayLastInd] &&
+            repeats !== 0
           ) {
             const offset = original - repeats + 1;
             const start = offset * 100;
@@ -158,35 +160,51 @@ export default (props) => {
   }
 
   return (
-    <div>
-      <form onSubmit={compositifyCalled}>
+    <div className="formOverall">
+      <div className="customize">
+        <strong>Customize Your Playlist!</strong>
+      </div>
+      <form onSubmit={compositifyCalled} className="form">
         <input
           name="PlaylistName"
           value={playlistName}
           onChange={(input) => setPlaylistName(input.target.value)}
+          placeholder="~ Playlist Name ~"
+          className="playlistName"
         />
         <textarea
           name="Description"
           value={description}
           onChange={(input) => setDescription(input.target.value)}
+          placeholder="Description:"
+          className="description"
         />
-        <input
-          name="Collaboration"
-          type="checkbox"
-          checked={collaboration}
-          onChange={(input) => setCollaboration(input.target.checked)}
-        />
-        <div>
-          <select
-            name="Privacy"
-            value={privacy}
-            onChange={(input) => modifyPrifacy(input)}
-          >
-            <option>Public</option>
-            <option>Private</option>
-          </select>
+        <div className="privacyCollaboration">
+          <div>
+            <select
+              name="Privacy"
+              value={privacy}
+              onChange={(input) => modifyPrifacy(input)}
+              className="privacy"
+            >
+              <option>Public</option>
+              <option>Private</option>
+            </select>
+          </div>
+          <div className="collaborationText">
+            Collaboration?
+            <input
+              name="Collaboration"
+              type="checkbox"
+              checked={collaboration}
+              onChange={(input) => setCollaboration(input.target.checked)}
+              className="collaboration"
+            />
+          </div>
         </div>
-        <button type="submit">Compositify!</button>
+        <button type="submit" className="submit">
+          <strong>COMPOSITIFY!</strong>
+        </button>
       </form>
       <a
         className={visible}
@@ -194,10 +212,10 @@ export default (props) => {
         rel="noopener noreferrer"
         target="_blank"
       >
-        Bring Me To My Playlist!
+        <strong>Bring Me To My Playlist!</strong>
       </a>
       <button className={visible} onClick={resetAll}>
-        Reset All
+        <strong>Reset All</strong>
       </button>
     </div>
   );
