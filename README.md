@@ -75,9 +75,11 @@ Sunday, January 16th - Thursday, January 20th: Brief 15-30 minute work sessions
 
 ## How to Run
 
-Method 1: [Live Deployment of Website on Netlify](https://boring-brahmagupta-56d3ae.netlify.app)
+Method 1: [YouTube Video](https://www.youtube.com/watch?v=6VYXeNswZCE)
 
-Method 2: Run site locally using the following steps:
+Method 2: [Live Deployment of Website on Netlify](https://boring-brahmagupta-56d3ae.netlify.app)
+
+Method 3: Run site locally using the following steps:
 
 First, download the .zip file for the master branch above.
 
