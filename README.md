@@ -1,4 +1,4 @@
-# spark-spotify-composite
+# spotify-composite
 
 NOTE - PLEASE READ: According to the Spotify API Developer rules, this app requires specific user account 
 authorization to use. \
