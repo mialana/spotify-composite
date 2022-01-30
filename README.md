@@ -9,7 +9,7 @@ Please email liu.amy05@gmail.com if you wish to obtain access to this app.
   
 ## Description
 
-For the Spark Red Technical Assessment, I made an app called Spotify Composite.
+This is a personal project I worked on called Spotify Composite.
 It essentially merges multiple playlists from a user's Spotify account into 
 one large, customized playlist.
 
