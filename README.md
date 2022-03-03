@@ -1,13 +1,21 @@
 # spotify-composite
 
-NOTE - PLEASE READ: According to the Spotify API Developer rules, this app requires specific user account 
+NOTE - PLEASE READ: According to the Spotify API Developer rules, this app requires specific user account
 authorization to use. \
-Please email liu.amy05@gmail.com if you wish to obtain access to this app.
+Thus, I have created a standard Spotify account for all users of this app. To log into this account, press
+"Login to Spotify" on the app's home page, select "Continue with Google" on the Spotify.com Login page, and
+enter the following credentials: \
+Email: spotifycomposite@gmail.com \
+Password: compositify123! \
+
+Alternatively, please email liu.amy05@gmail.com if you wish to obtain access to this app using your personal Spotify account.
 
 - View the following link for more information on this requirement:
   [Spotify For Developers](https://developer.spotify.com/community/news/2021/05/27/improving-the-developer-and-user-experience-for-third-party-apps/)
-  
+
 ## Description
+
+[Live Deployment of Website on Netlify](https://condescending-leakey-e54614.netlify.app)
 
 This is a personal project I worked on called Spotify Composite.
 It essentially merges multiple playlists from a user's Spotify account into 
@@ -73,11 +81,15 @@ Friday, January 14th: 3 hrs \
 Saturday, January 15th: 2.5 hrs \
 Sunday, January 16th - Thursday, January 20th: Brief 15-30 minute work sessions
 
+## Future Add-ons
+
+I hope to continue building onto this app in the future, perhaps implementing different “Compositify” options that utilize other really cool information that Spotify provides, such as audio features, genre classifications, and popularity ratings.
+
 ## How to Run
 
 Method 1: [YouTube Video](https://www.youtube.com/watch?v=6VYXeNswZCE)
 
-Method 2: [Live Deployment of Website on Netlify](https://boring-brahmagupta-56d3ae.netlify.app)
+Method 2: [Live Deployment of Website on Netlify](https://condescending-leakey-e54614.netlify.app)
 
 Method 3: Run site locally using the following steps:
 
