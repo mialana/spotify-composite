@@ -6,7 +6,7 @@ global.Buffer = global.Buffer || require("buffer").Buffer;
 const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
 const CLIENT_ID = "2576cea43cb54b30809d0dd85c936e6f";
 const RESPONSE_TYPE = "code";
-const REDIRECT_URL_AFTER_LOGIN = "http://localhost:3000/main";
+const REDIRECT_URL_AFTER_LOGIN = "https://condescending-leakey-e54614.netlify.app/main";
 const SCOPES =
   "user-read-currently-playing user-read-playback-state playlist-read-private playlist-modify-private playlist-modify-public";
 const CODE_CHALLENGE_METHOD = "S256";

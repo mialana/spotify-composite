@@ -24,7 +24,7 @@ export default () => {
         client_id: CLIENT_ID,
         grant_type: "authorization_code",
         code: code,
-        redirect_uri: "http://localhost:3000/main",
+        redirect_uri: "https://condescending-leakey-e54614.netlify.app/main",
         code_verifier: localStorage.getItem("code_verifier"),
       };
 
