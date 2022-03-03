@@ -75,12 +75,6 @@ Miscellaneous Features:
 - Using callbacks in child component to effect parent
 - Animations
 
-## Time Spent
-
-Friday, January 14th: 3 hrs \
-Saturday, January 15th: 2.5 hrs \
-Sunday, January 16th - Thursday, January 20th: Brief 15-30 minute work sessions
-
 ## Future Add-ons
 
 I hope to continue building onto this app in the future, perhaps implementing different “Compositify” options that utilize other really cool information that Spotify provides, such as audio features, genre classifications, and popularity ratings.
