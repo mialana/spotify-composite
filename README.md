@@ -6,7 +6,7 @@ Thus, I have created a standard Spotify account for all users of this app. To lo
 "Login to Spotify" on the app's home page, select "Continue with Google" on the Spotify.com Login page, and
 enter the following credentials: \
 Email: spotifycomposite@gmail.com \
-Password: compositify123! \
+Password: compositify123!
 
 Alternatively, please email liu.amy05@gmail.com if you wish to obtain access to this app using your personal Spotify account.
 
