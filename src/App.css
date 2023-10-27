@@ -39,6 +39,22 @@ img.logo {
   width: 75%;
 }
 
+.login .info-button {
+  position: absolute;
+  right: 0;
+  top: 2.5rem;
+  float: right;
+  margin-right: 2.5rem;
+  background-color: black;
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  font-size: 1rem;
+  width: 1.5rem;
+  cursor: pointer;
+  font-family: 'Times New Roman', serif;
+}
+
 .logintext {
   color: white;
   font-size: 100%;

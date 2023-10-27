@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import base64url from "base64url";
 import sha256 from "sha256";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 global.Buffer = global.Buffer || require("buffer").Buffer;
 
 const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
@@ -12,10 +15,21 @@ const SCOPES =
 const CODE_CHALLENGE_METHOD = "S256";
 
 export default () => {
+  const notify = () =>
+    toast.info(
+      "According to the Spotify API Developer rules, this app requires \
+  specific user account authorization to use. Please email liu.amy05@gmail.com if you wish to \
+  obtain access to this app using your personal Spotify account.",
+      { autoClose: 10000, theme: "dark" }
+    );
+
+  useEffect(() => {
+    notify();
+  }, []);
+
   // function that generates random string from listed acceptable characters on Spotify API
   const generateRandomString = (myLength) => {
-    const chars =
-      "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890_.-~";
+    const chars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890_.-~";
 
     const randomArray = Array.from(
       { length: myLength },
@@ -49,6 +63,10 @@ export default () => {
 
   return (
     <div className="login">
+      <ToastContainer hideProgressBar />
+      <button className="info-button" onClick={notify}>
+        <b>i</b>
+      </button>
       <span className="logintext">
         Welcome to Spotify Composite! To get started, click on the button below.
       </span>
