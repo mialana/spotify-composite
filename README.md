@@ -19,8 +19,6 @@ Alternatively, please email liu.amy05@gmail.com if you wish to obtain access to 
 
 ## Description
 
-[Live Deployment of Website on Netlify](https://condescending-leakey-e54614.netlify.app)
-
 This is a personal project I worked on called Spotify Composite.
 It essentially merges multiple playlists from a user's Spotify account into 
 one large, customized playlist.
@@ -87,9 +85,7 @@ I hope to continue building onto this app in the future, perhaps implementing di
 
 Method 1: [YouTube Video](https://youtu.be/6VYXeNswZCE)
 
-Method 2: [Live Deployment of Website on Netlify](https://condescending-leakey-e54614.netlify.app)
-
-Method 3: Run site locally using the following steps:
+Method 2: Run site locally using the following steps:
 
 First, download the .zip file for the master branch above.
 

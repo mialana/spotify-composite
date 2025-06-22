@@ -20,15 +20,11 @@ export default () => {
       // console.log("request for tokens initiated");
       const code = searchParams.get("code");
 
-      const redirectUri = new URL("/main", `${process.env.REACT_APP_BASE_URL}`).toString();
-
-      console.log(`Redirect URI is: ${redirectUri}`)
-
       const postBody = {
         client_id: CLIENT_ID,
         grant_type: "authorization_code",
         code: code,
-        redirect_uri: redirectUri,
+        redirect_uri: "http://localhost:3000/main",
         code_verifier: localStorage.getItem("code_verifier"),
       };
 
