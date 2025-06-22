@@ -1,4 +1,8 @@
-# spotify-composite
+# Spotify Composite
+
+![img](.thumbs/thumbnail.png)
+
+**[Demo Video](https://youtu.be/6VYXeNswZCE)**
 
 NOTE - PLEASE READ: According to the Spotify API Developer rules, this app requires specific user account
 authorization to use. \
@@ -79,9 +83,9 @@ Miscellaneous Features:
 
 I hope to continue building onto this app in the future, perhaps implementing different “Compositify” options that utilize other really cool information that Spotify provides, such as audio features, genre classifications, and popularity ratings.
 
-## How to Run
+## Get a closer look
 
-Method 1: [YouTube Video](https://www.youtube.com/watch?v=6VYXeNswZCE)
+Method 1: [YouTube Video](https://youtu.be/6VYXeNswZCE)
 
 Method 2: [Live Deployment of Website on Netlify](https://condescending-leakey-e54614.netlify.app)
 

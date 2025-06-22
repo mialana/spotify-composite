@@ -20,11 +20,21 @@ export default () => {
       // console.log("request for tokens initiated");
       const code = searchParams.get("code");
 
+      let baseUrl = process.env.REACT_APP_BASE_URL;
+
+      if (!baseUrl) {
+        throw new Error("REACT_APP_BASE_URL is not defined as an environment variable.");
+      }
+
+      const redirectUri = new URL("/main", `http://${baseUrl}`).toString();
+
+      console.log(`Redirect URI is: ${redirectUri}`)
+
       const postBody = {
         client_id: CLIENT_ID,
         grant_type: "authorization_code",
         code: code,
-        redirect_uri: "http://localhost:3000/main",
+        redirect_uri: redirectUri,
         code_verifier: localStorage.getItem("code_verifier"),
       };
 
