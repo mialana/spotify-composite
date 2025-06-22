@@ -6,13 +6,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 global.Buffer = global.Buffer || require("buffer").Buffer;
 
+console.log(process.env.REACT_APP_BASE_URL)
+
 const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
 const CLIENT_ID = "2576cea43cb54b30809d0dd85c936e6f";
 const RESPONSE_TYPE = "code";
-const REDIRECT_URL_AFTER_LOGIN = new URL("/main", `http://${process.env.REACT_APP_BASE_URL}`).toString();
+const REDIRECT_URL_AFTER_LOGIN = new URL("/main", `${process.env.REACT_APP_BASE_URL}`).toString();
 const SCOPES =
   "user-read-currently-playing user-read-playback-state playlist-read-private playlist-modify-private playlist-modify-public";
 const CODE_CHALLENGE_METHOD = "S256";
+
+
 
 export default () => {
   const notify = () =>

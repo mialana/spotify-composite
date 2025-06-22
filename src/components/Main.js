@@ -20,13 +20,7 @@ export default () => {
       // console.log("request for tokens initiated");
       const code = searchParams.get("code");
 
-      let baseUrl = process.env.REACT_APP_BASE_URL;
-
-      if (!baseUrl) {
-        throw new Error("REACT_APP_BASE_URL is not defined as an environment variable.");
-      }
-
-      const redirectUri = new URL("/main", `http://${baseUrl}`).toString();
+      const redirectUri = new URL("/main", `${process.env.REACT_APP_BASE_URL}`).toString();
 
       console.log(`Redirect URI is: ${redirectUri}`)
 
