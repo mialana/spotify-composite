@@ -4,7 +4,7 @@
 
 **[Demo Video](https://youtu.be/6VYXeNswZCE)**
 
-NOTE - PLEASE READ: According to the Spotify API Developer rules, this app requires specific user account
+*NOTE:* According to the Spotify API Developer rules, this app requires specific user account
 authorization to use. \
 Thus, I have created a standard Spotify account for all users of this app. To log into this account, press
 "Login to Spotify" on the app's home page, select "Continue with Google" on the Spotify.com Login page, and
