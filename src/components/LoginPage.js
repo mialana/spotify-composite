@@ -11,70 +11,72 @@ const CLIENT_ID = "2576cea43cb54b30809d0dd85c936e6f";
 const RESPONSE_TYPE = "code";
 const REDIRECT_URL_AFTER_LOGIN = "http://localhost:3000/main";
 const SCOPES =
-  "user-read-currently-playing user-read-playback-state playlist-read-private playlist-modify-private playlist-modify-public";
+    "user-read-currently-playing user-read-playback-state playlist-read-private playlist-modify-private playlist-modify-public";
 const CODE_CHALLENGE_METHOD = "S256";
 
 export default () => {
-  const notify = () =>
-    toast.info(
-      "According to the Spotify API Developer rules, this app requires \
+    const notify = () =>
+        toast.info(
+            "According to the Spotify API Developer rules, this app requires \
   specific user account authorization to use. Please email liu.amy05@gmail.com if you wish to \
   obtain access to this app using your personal Spotify account.",
-      { autoClose: 10000, theme: "dark" }
+            { autoClose: 10000, theme: "dark" }
+        );
+
+    useEffect(() => {
+        notify();
+    }, []);
+
+    // function that generates random string from listed acceptable characters on Spotify API
+    const generateRandomString = (myLength) => {
+        const chars =
+            "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890_.-~";
+
+        const randomArray = Array.from(
+            { length: myLength },
+            () => chars[Math.floor(Math.random() * chars.length)]
+        );
+
+        const randomString = randomArray.join("");
+        return randomString;
+    };
+
+    // function that creates the required code challenge for User Authorization Request API call
+    async function createCodeChallenge() {
+        localStorage.setItem("code_verifier", generateRandomString(128));
+
+        const hexDigest = sha256(localStorage.getItem("code_verifier"));
+        const base64Digest = Buffer.from(hexDigest, "hex").toString("base64");
+        const CODE_CHALLENGE = base64url.fromBase64(base64Digest);
+
+        return CODE_CHALLENGE;
+    }
+
+    // redirects user to spotify-owned login page
+    // sets up local storage for later functions
+    const handleLogin = async () => {
+        localStorage.clear();
+        localStorage.setItem("tokens_already_requested", "false");
+        localStorage.setItem("user_id_already_requested", "false");
+        const setCodeChallenge = await createCodeChallenge();
+        window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES}&code_challenge_method=${CODE_CHALLENGE_METHOD}&code_challenge=${setCodeChallenge}`;
+    };
+
+    return (
+        <div className="login">
+            <ToastContainer hideProgressBar />
+            <button className="info-button" onClick={notify}>
+                <b>i</b>
+            </button>
+            <span className="logintext">
+                Welcome to Spotify Composite! To get started, click on the
+                button below.
+            </span>
+            <p>
+                <button className="loginbutton" onClick={handleLogin}>
+                    <strong>Login to Spotify</strong>
+                </button>
+            </p>
+        </div>
     );
-
-  useEffect(() => {
-    notify();
-  }, []);
-
-  // function that generates random string from listed acceptable characters on Spotify API
-  const generateRandomString = (myLength) => {
-    const chars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890_.-~";
-
-    const randomArray = Array.from(
-      { length: myLength },
-      () => chars[Math.floor(Math.random() * chars.length)]
-    );
-
-    const randomString = randomArray.join("");
-    return randomString;
-  };
-
-  // function that creates the required code challenge for User Authorization Request API call
-  async function createCodeChallenge() {
-    localStorage.setItem("code_verifier", generateRandomString(128));
-
-    const hexDigest = sha256(localStorage.getItem("code_verifier"));
-    const base64Digest = Buffer.from(hexDigest, "hex").toString("base64");
-    const CODE_CHALLENGE = base64url.fromBase64(base64Digest);
-
-    return CODE_CHALLENGE;
-  }
-
-  // redirects user to spotify-owned login page
-  // sets up local storage for later functions
-  const handleLogin = async () => {
-    localStorage.clear();
-    localStorage.setItem("tokens_already_requested", "false");
-    localStorage.setItem("user_id_already_requested", "false");
-    const setCodeChallenge = await createCodeChallenge();
-    window.location = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&response_type=${RESPONSE_TYPE}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES}&code_challenge_method=${CODE_CHALLENGE_METHOD}&code_challenge=${setCodeChallenge}`;
-  };
-
-  return (
-    <div className="login">
-      <ToastContainer hideProgressBar />
-      <button className="info-button" onClick={notify}>
-        <b>i</b>
-      </button>
-      <span className="logintext">
-        Welcome to Spotify Composite! To get started, click on the button below.
-      </span>
-      <p>
-        <button className="loginbutton" onClick={handleLogin}>
-          <strong>Login to Spotify</strong>
-        </button>
-      </p>
-    </div>
-  );
 };
